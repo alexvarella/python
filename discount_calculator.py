@@ -17,23 +17,30 @@ def calcular_preco_final(preco_original, forma_pagamento):
     return preco_final, desconto_percentual
 
 
-def main():
-    preco_original = float(input("Qual o preço do produto? "))
-    forma_pagamento = input(
-        "Qual a forma de pagamento? Pix(p), Débito(d), Crédito(c) "
-    ).strip().lower()
+MAX_TENTATIVAS = 3
 
-    try:
-        preco_final, desconto_percentual = calcular_preco_final(
-            preco_original, forma_pagamento
-        )
-    except ValueError:
-        print("Forma de pagamento inválida. Tecle enter e digite o preço do produto.")
+
+def main():
+    for tentativa in range(1, MAX_TENTATIVAS + 1):
+        preco_original = float(input("Qual o preço do produto? "))
+        forma_pagamento = input(
+            "Qual a forma de pagamento? Pix(p), Débito(d), Crédito(c) "
+        ).strip().lower()
+
+        try:
+            preco_final, desconto_percentual = calcular_preco_final(
+                preco_original, forma_pagamento
+            )
+        except ValueError:
+            print("Forma de pagamento inválida.\n")
+            continue
+
+        print(f"Preço original: R$ {preco_original:.2f}")
+        print(f"Desconto aplicado: {desconto_percentual}%")
+        print(f"Preço final: R$ {preco_final:.2f}")
         return
 
-    print(f"Preço original: R$ {preco_original:.2f}")
-    print(f"Desconto aplicado: {desconto_percentual}%")
-    print(f"Preço final: R$ {preco_final:.2f}")
+    print("Número máximo de tentativas excedido. Procure a central de atendimento no 0800 000 123.")
 
 
 if __name__ == "__main__":
