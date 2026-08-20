@@ -5,6 +5,11 @@ DESCONTOS_POR_FORMA_PAGAMENTO = {
 }
 
 
+def parse_preco(texto):
+    """Converte o texto do preço em float, aceitando vírgula ou ponto como separador decimal."""
+    return float(texto.strip().replace(",", "."))
+
+
 def calcular_preco_final(preco_original, forma_pagamento):
     """Calcula o preço final aplicando o desconto da forma de pagamento (p/d/c)."""
     if preco_original < 0:
@@ -22,17 +27,18 @@ MAX_TENTATIVAS = 3
 
 def main():
     for tentativa in range(1, MAX_TENTATIVAS + 1):
-        preco_original = float(input("Qual o preço do produto? "))
+        preco_texto = input("Qual o preço do produto? ")
         forma_pagamento = input(
             "Qual a forma de pagamento? Pix(p), Débito(d), Crédito(c) "
         ).strip().lower()
 
         try:
+            preco_original = parse_preco(preco_texto)
             preco_final, desconto_percentual = calcular_preco_final(
                 preco_original, forma_pagamento
             )
         except ValueError:
-            print("Forma de pagamento inválida.\n")
+            print("Preço ou forma de pagamento inválidos.\n")
             continue
 
         print(f"Preço original: R$ {preco_original:.2f}")
